@@ -1,0 +1,46 @@
+# git
+alias fetch='git fetch'
+alias co='git checkout'
+alias soft='git reset --soft'
+alias hard='git reset --hard'
+alias merge='git merge'
+alias prune='git remote prune origin'
+alias amend='git commit --amend -aC HEAD'
+commit() {
+  message=$1
+  if [ -z $message ]; then
+    echo "Message should be specified."
+    return
+  fi
+  git commit -am $message
+}
+push() {
+  push_handler "HEAD" "" $1
+}
+pushf() {
+  push_handler "HEAD" "-f" $1
+}
+pushd() {
+  push_handler "" "" $1
+}
+push_handler() {
+  head=$1
+  force=$2
+  branch=$3
+
+  if [ -z ${branch} ]; then
+    echo "Branch should be specified."
+    return
+  fi
+
+  git push ${force} origin ${head}:refs/heads/${branch}
+}
+
+# refs
+to() {
+  val=$1
+  if   [ $val = "github" ]; then open https://github.com/iuriivolobuev/sample-java;
+  elif [ $val = "maps" ]; then open https://www.google.com/maps;
+  else echo "Ref isn't defined.";
+  fi
+}
