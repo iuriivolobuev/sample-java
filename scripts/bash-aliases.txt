@@ -6,6 +6,7 @@ alias hard='git reset --hard'
 alias merge='git merge'
 alias prune='git remote prune origin'
 alias amend='git commit --amend -aC HEAD'
+alias br='git branch -r --column --sort -committerdate'
 commit() {
   message=$1
   if [ -z $message ]; then
