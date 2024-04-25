@@ -1,0 +1,52 @@
+# git
+alias fetch='git fetch'
+alias co='git checkout'
+alias soft='git reset --soft'
+alias hard='git reset --hard'
+alias merge='git merge'
+alias prune='git remote prune origin'
+alias amend='git commit --amend -aC HEAD'
+alias br='git branch -r --column --sort -committerdate'
+commit() {
+  message=$1
+  if [ -z $message ]; then
+    echo "Message isn't specified."
+    return
+  fi
+  git commit -am $message
+}
+push() {
+  push_handler "HEAD" "" $1
+}
+pushf() {
+  push_handler "HEAD" "-f" $1
+}
+pushd() {
+  push_handler "" "" $1
+}
+push_handler() {
+  head=$1
+  force=$2
+  branch=$3
+
+  if [ -z ${branch} ]; then
+    echo "Branch isn't specified."
+    return
+  fi
+
+  git push ${force} origin ${head}:refs/heads/${branch}
+}
+
+# refs
+to() {
+  ref=$1
+  if [ -z $ref ]; then
+    echo "Ref isn't specified."
+    return
+  fi
+
+  if   [ $ref = "gh" ]; then open https://github.com/;
+  elif [ $ref = "so" ]; then open https://stackoverflow.com/;
+  else echo "Ref '${ref}' isn't known.";
+  fi
+}
