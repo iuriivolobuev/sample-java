@@ -13,6 +13,9 @@
     </mvc:message-converters>
   </mvc:annotation-driven>
 
+  <mvc:resources mapping="/static/**" location="classpath:/static/"/>
+
+  <bean class="app.controller.HtmlController"/>
   <bean class="app.controller.DeckController"/>
 
 </beans>
