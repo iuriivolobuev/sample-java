@@ -1,7 +1,7 @@
 Sample Java
 -----------
 
-Sample project for learning and experimenting with Java and Java related technologies.
+Sample project for learning and experimenting with Java and related technologies.
 
 # Useful Links
 
