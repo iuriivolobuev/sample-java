@@ -8,13 +8,18 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class HtmlController {
     @GetMapping("/")
-    void index(HttpServletResponse response) {
+    void indexPage(HttpServletResponse response) {
         response.setHeader("Location", "decks");
         response.setStatus(302);
     }
 
     @GetMapping("/decks")
-    public String decks() {
+    public String decksPage() {
         return "/static/html/decks.html";
+    }
+
+    @GetMapping("/deck/{id}")
+    public String deckPage() {
+        return "/static/html/deck.html";
     }
 }

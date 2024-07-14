@@ -1,3 +1,7 @@
 *.iml
 .idea/
 target/
+
+scripts/proxy-server/node_modules/
+scripts/proxy-server/package.json
+scripts/proxy-server/package-lock.json
