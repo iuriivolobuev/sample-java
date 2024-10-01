@@ -8,11 +8,20 @@
   <artifactId>sample-java</artifactId>
   <version>1.0.0</version>
 
+  <properties>
+    <tomcat.version>9.0.80</tomcat.version><!--The latest Tomcat version before they moved to Jakarta EE.-->
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.tomcat.embed</groupId>
       <artifactId>tomcat-embed-core</artifactId>
-      <version>9.0.80</version><!--The latest Tomcat version before they moved to Jakarta EE.-->
+      <version>${tomcat.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.tomcat.embed</groupId>
+      <artifactId>tomcat-embed-jasper</artifactId>
+      <version>${tomcat.version}</version>
     </dependency>
 
     <dependency>
@@ -24,6 +33,12 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.14.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>5.4.3.Final</version>
     </dependency>
 
     <dependency>
@@ -59,6 +74,12 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>spring-mock-mvc</artifactId>
+      <version>5.3.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

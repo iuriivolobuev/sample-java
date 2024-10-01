@@ -17,5 +17,10 @@
 
   <bean class="app.controller.HtmlController"/>
   <bean class="app.controller.DeckController"/>
+  <bean class="app.controller.DogController">
+    <constructor-arg ref="dogService"/>
+  </bean>
+
+  <bean id="dogService" class="app.service.DogService"/>
 
 </beans>
