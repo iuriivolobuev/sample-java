@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class DogControllerIT {
     @Test
     public void createsDog() {
-        DogDto expected = new DogDto().setName("Bobby").setDate(new Date()).setHeight(0.35).setWeight(7.5);
+        DogDto expected = new DogDto().setName("Bobby").setBirthDate(new Date()).setHeight(0.35).setWeight(7.5);
         long dogId = createDog(expected);
 
         DogDto actual = getDog(dogId);
@@ -29,7 +29,7 @@ public class DogControllerIT {
 
     @Test
     public void updatesDog() {
-        DogDto expected = new DogDto().setName("Bobby").setDate(new Date()).setHeight(0.35).setWeight(7.5);
+        DogDto expected = new DogDto().setName("Bobby").setBirthDate(new Date()).setHeight(0.35).setWeight(7.5);
         long dogId = createDog(expected);
 
         expected.setName("Tom");
@@ -41,7 +41,7 @@ public class DogControllerIT {
 
     @Test
     public void deletesDog() {
-        DogDto expected = new DogDto().setName("Bobby").setDate(new Date()).setHeight(0.35).setWeight(7.5);
+        DogDto expected = new DogDto().setName("Bobby").setBirthDate(new Date()).setHeight(0.35).setWeight(7.5);
         long dogId = createDog(expected);
 
         DogDto actual = getDog(dogId);

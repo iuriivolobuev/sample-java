@@ -8,8 +8,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 
-public class DogEndpoints {
-    DogEndpoints(MockMvc mvc) {
+class DogControllerMockMvc {
+    DogControllerMockMvc(MockMvc mvc) {
         RestAssuredMockMvc.mockMvc(mvc);
         RestAssuredMockMvc.requestSpecification = new MockMvcRequestSpecBuilder().setContentType(ContentType.JSON).build();
     }

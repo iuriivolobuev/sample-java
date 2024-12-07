@@ -1,15 +1,28 @@
 package app.dto;
 
 import javax.validation.constraints.Size;
+import java.time.ZonedDateTime;
 import java.util.Date;
+
+import static io.qala.datagen.RandomShortApi.*;
 
 public class DogDto {
     private Long id;
     @Size(min = 1, max = 100, message = "Name size should be between 1 and 100.")
     private String name;
-    private Date date;
+    private Date birthDate;
     private Double height;
     private Double weight;
+
+    public static DogDto random() {
+        DogDto dog = new DogDto();
+        dog.name = alphanumeric(1, 100);
+        dog.birthDate = nullOr(new Date(Long(ZonedDateTime.now().withYear(2000).toInstant().toEpochMilli(),
+                System.currentTimeMillis())));
+        dog.height = positiveDouble();
+        dog.weight = positiveDouble();
+        return dog;
+    }
 
     public Long getId() {
         return id;
@@ -29,12 +42,12 @@ public class DogDto {
         return this;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public DogDto setDate(Date date) {
-        this.date = date;
+    public DogDto setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
         return this;
     }
 

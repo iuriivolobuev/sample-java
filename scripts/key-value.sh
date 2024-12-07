@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage:
-# 1. source simplest-db.sh
+# 1. source key-value.sh
 # 2. db_set a 15
 # 3. db_set b 25
 # 4. db_get a

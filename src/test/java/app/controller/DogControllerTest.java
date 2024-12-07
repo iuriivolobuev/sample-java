@@ -12,12 +12,12 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DogControllerTest {
     @Autowired
-    private DogEndpoints dogs;
+    private DogControllerMockMvc sut;
 
     @Test
     public void createsDog() {
-        DogDto toCreate = new DogDto().setName("Bobby");
-        DogDto result = dogs.createDog(toCreate);
+        DogDto toCreate = DogDto.random();
+        DogDto result = sut.createDog(toCreate);
         assertEquals(result.getName(), toCreate.getName());
     }
 }

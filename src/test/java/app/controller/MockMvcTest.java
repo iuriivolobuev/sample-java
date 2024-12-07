@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
  * <ul>
  *     <li>This makes it easier to read the code (it's pretty hard to find things out when you have a whole hierarchy
  * of classes)</li>
- *     <li>It's more flexible since you can set multiple annotations on the same test class while there</li>
+ *     <li>It's more flexible since you can set multiple annotations on the same test class</li>
  * </ul>
  * </p>
  */
