@@ -52,6 +52,7 @@ public class DogController {
         return dog;
     }
 
+    //todo: 1. should it put when no object there? 2. should it return old version?
     @PutMapping("/dog/{id}")
     public DogDto updateDog(@PathVariable long id, @RequestBody DogDto dog) {
         logger.info("Updating a dog: id=[{}].", id);
