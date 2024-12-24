@@ -55,8 +55,12 @@ public class DogController {
     @PutMapping("/dog/{id}")
     public DogDto updateDog(@PathVariable long id, @RequestBody DogDto dog) {
         logger.info("Updating a dog: id=[{}].", id);
+        if (!DOGS.containsKey(id)) {
+            throw new ObjectNotFoundException(DogDto.class, id);
+        }
         dog.setId(id);
-        return DOGS.put(id, dog);
+        DOGS.put(id, dog);
+        return dog;
     }
 
     @DeleteMapping("/dog/{id}")

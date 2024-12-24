@@ -9,8 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 public class HtmlController {
     @GetMapping("/")
     void indexPage(HttpServletResponse response) {
-        response.setHeader("Location", "decks");
+        response.setHeader("Location", "dogs");
         response.setStatus(302);
+    }
+
+    @GetMapping("/dogs")
+    public String dogsPage() {
+        return "/static/html/dogs.html";
     }
 
     @GetMapping("/decks")
