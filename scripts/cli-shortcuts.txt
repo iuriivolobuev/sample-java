@@ -45,8 +45,8 @@ to() {
     return
   fi
 
-  if   [ $ref = "gh" ]; then open https://github.com/;
-  elif [ $ref = "so" ]; then open https://stackoverflow.com/;
+  if   [ $ref = "github" ]; then open https://github.com/iuriivolobuev/sample-java;
+  elif [ $ref = "vocab"  ]; then sh ~/apps/vocabulary-trainer/run.sh $2;
   else echo "Ref '${ref}' isn't known.";
   fi
 }
