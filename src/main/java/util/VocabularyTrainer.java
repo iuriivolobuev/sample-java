@@ -1,6 +1,8 @@
 package util;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -116,6 +118,35 @@ class VocabularyTrainer {
         public Translation(String from, String to) {
             this.from = from;
             this.to = to;
+        }
+    }
+
+    @SuppressWarnings("unused")//txt format is needed for learning before training
+    private static class CsvToTxtConverter {
+        public static void main(String[] args) throws IOException {
+            if (args.length == 0) {
+                printText("Path should be specified as an argument.");
+                return;
+            }
+
+            List<Translation> translations;
+            String csvPath = args[0];
+            try {
+                translations = readTranslationsFromCsv(csvPath);
+            } catch (IOException e) {
+                printText("Couldn't get translations from '%s'.".formatted(csvPath));
+                return;
+            }
+
+            if (!translations.isEmpty()) {
+                try (PrintWriter writer = new PrintWriter("translations.txt", StandardCharsets.UTF_8)) {
+                    for (Translation translation : translations) {
+                        writer.println(translation.to);
+                        writer.println(translation.from);
+                        writer.println();
+                    }
+                }
+            }
         }
     }
 }
