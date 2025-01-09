@@ -30,6 +30,7 @@ import java.util.stream.Stream;
  */
 class VocabularyTrainer {
     private static final String CSV_DELIMITER = "\\|";
+    private static final String GET_ANSWER_COMMAND = "?";
 
     public static void main(String[] args) {
         if (args.length == 0) {
@@ -49,14 +50,15 @@ class VocabularyTrainer {
 
         printSeparationLine();
         int size = translations.size();
-        printText("Number of translations to train: [%d].".formatted(size));
+        printText("Number of translations to train: [%d]. Type '%s' to get an answer.".formatted(size, GET_ANSWER_COMMAND));
         Scanner scanner = new Scanner(System.in);
         for (int i = 0; i < size; i++) {
             printSeparationLine();
             Translation translation = translations.get(i);
             System.out.println(translation.from);
-            process(scanner, translation.to);
-            printProgress(size, i + 1);
+            String answer = translation.to;
+            boolean answered = process(scanner, answer);
+            printProgress(answer, answered, size, i + 1);
         }
         printSeparationLine();
         printText("Completed!");
@@ -74,11 +76,14 @@ class VocabularyTrainer {
         return translations;
     }
 
-    private static void process(Scanner scanner, String answer) {
+    private static boolean process(Scanner scanner, String answer) {
         while (true) {
             String input = scanner.nextLine().trim();
             if (answer.equals(input)) {
-                break;
+                return true;
+            }
+            if (GET_ANSWER_COMMAND.equals(input)) {
+                return false;
             }
             StringBuilder hint = new StringBuilder(answer.length());
             for (int j = 0; j < answer.length(); j++) {
@@ -105,10 +110,13 @@ class VocabularyTrainer {
         System.out.println("-".repeat(60));
     }
 
-    private static void printProgress(int size, int completed) {
-        //prints in this format: "👍 [===  ] 60%"
-        System.out.printf("\uD83D\uDC4D [%s%s] %d%%%n", "=".repeat(completed), " ".repeat(size - completed),
-                completed * 100 / size);
+    private static void printProgress(String answer, boolean answered, int size, int completed) {
+        if (!answered) {
+            System.out.println(answer);
+        }
+        //prints in this format: "✅ [===  ] 60%" or "❗ [===  ] 60%"
+        System.out.printf("%s [%s%s] %d%%%n", answered ? '✅' : '❗', "=".repeat(completed),
+                " ".repeat(size - completed), completed * 100 / size);
     }
 
     private static class Translation {
