@@ -1,88 +1,116 @@
 package app.controller;
 
 import app.dto.DogDto;
-import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
 
-import java.util.Date;
+import java.util.List;
 
 import static io.qala.datagen.RandomShortApi.alphanumeric;
+import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 
 public class DogControllerIT {
     @Test
     public void createsDog() {
-        DogDto toCreate = DogDto.random();
-        long dogId = createDog(toCreate);
+        DogDto newDog = DogDto.random();
+        long id = createDog(newDog).getId();
 
-        DogDto loaded = getDog(dogId);
-        assertDogsEqual(loaded, toCreate);
+        DogDto loaded = getDog(id);
+        assertDogsEqual(loaded, newDog);
     }
 
     @Test
-    public void errsIfDogNameIsNotValid_whenCreatingDog() {
+    public void errs_ifDogIsNotValid_whenCreatingDog() {
         DogDto notValid = DogDto.random().setName(alphanumeric(101));
-        createDogWithValidationError(notValid);
+        createDogWithError(notValid, HttpStatus.BAD_REQUEST, "Name size should be between 1 and 100.");
     }
 
     @Test
     public void updatesDog() {
-        long dogId = createDog(DogDto.random());
+        long id = createDog(DogDto.random()).getId();
         DogDto toUpdate = DogDto.random();
-        updateDog(dogId, toUpdate);
+        updateDog(id, toUpdate);
 
-        DogDto loaded = getDog(dogId);
+        DogDto loaded = getDog(id);
         assertDogsEqual(loaded, toUpdate);
     }
 
     @Test
-    public void errsIfDogDoesNotExist_whenUpdatingDog() {
-        updateDogWithNotFoundError(-1, DogDto.random());
+    public void errs_ifDogIsNotValid_whenUpdatingDog() {
+        long id = createDog(DogDto.random()).getId();
+        DogDto notValid = DogDto.random().setName(alphanumeric(101));
+        updateDogWithError(id, notValid, HttpStatus.BAD_REQUEST, "Name size should be between 1 and 100.");
+    }
+
+    @Test
+    public void errs_ifDogDoesNotExist_whenUpdatingDog() {
+        updateDogWithError(-1, DogDto.random(), HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[-1].");
     }
 
     @Test
     public void deletesDog() {
-        DogDto expected = new DogDto().setName("Bobby").setBirthDate(new Date()).setHeight(0.35).setWeight(7.5);
-        long dogId = createDog(expected);
+        long id = createDog(DogDto.random()).getId();
 
-        DogDto actual = getDog(dogId);
+        DogDto actual = getDog(id);
         assertThat(actual).isNotNull();
 
-        deleteDog(dogId);
-        RestAssured.given().pathParam("id", dogId).get("/dog/{id}").then().statusCode(404);
+        deleteDog(id);
+        getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[%d].".formatted(id));
     }
 
-    private static DogDto getDog(long dogId) {
-        return RestAssured.given().pathParam("id", dogId).get("/dog/{id}").as(DogDto.class);
+    @Test
+    public void getsAllDogs() {
+        long id1 = createDog(DogDto.random()).getId();
+        long id2 = createDog(DogDto.random()).getId();
+        List<Long> ids = getAllDogs().stream().map(DogDto::getId).toList();
+        assertThat(ids).contains(id1, id2);
     }
 
-    private static long createDog(DogDto dog) {
-        Response response = RestAssured.given().contentType("application/json").body(dog).when().post("/dog");
-        assertEquals(response.getStatusCode(), HttpStatus.OK.value());
-        return response.as(DogDto.class).getId();
+    private static DogDto getDog(long id) {
+        Response response = given().get("/dog/{id}", id);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        return response.as(DogDto.class);
     }
 
-    private static void createDogWithValidationError(DogDto dog) {
-        Response response = RestAssured.given().contentType("application/json").body(dog).when().post("/dog");
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCode());
-        assertThat(response.as(String.class)).contains("Name size should be between 1 and 100.");
+    private static void getDogWithError(long id, HttpStatus status, String error) {
+        Response response = given().get("/dog/{id}", id);
+        assertThat(response.getStatusCode()).isEqualTo(status.value());
+        assertThat(response.as(String.class)).contains(error);
     }
 
-    private static void updateDog(long dogId, DogDto dog) {
-        RestAssured.given().pathParam("id", dogId).contentType("application/json").body(dog).when().put("/dog/{id}");
+    private static List<DogDto> getAllDogs() {
+        Response response = given().get("/dog");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        return List.of(response.as(DogDto[].class));
     }
 
-    private static void updateDogWithNotFoundError(long dogId, DogDto dog) {
-        Response response = RestAssured.given().pathParam("id", dogId).contentType("application/json").body(dog).when()
-                .put("/dog/{id}");
-        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
+    private static DogDto createDog(DogDto dog) {
+        Response response = given().contentType(ContentType.JSON).body(dog).when().post("/dog");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        return response.as(DogDto.class);
     }
 
-    private static void deleteDog(long dogId) {
-        RestAssured.given().pathParam("id", dogId).when().delete("/dog/{id}");
+    private static void createDogWithError(DogDto dog, HttpStatus status, String error) {
+        Response response = given().contentType(ContentType.JSON).body(dog).when().post("/dog");
+        assertThat(response.getStatusCode()).isEqualTo(status.value());
+        assertThat(response.as(String.class)).contains(error);
+    }
+
+    private static void updateDog(long id, DogDto dog) {
+        given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
+    }
+
+    private static void updateDogWithError(long id, DogDto dog, HttpStatus status, String error) {
+        Response response = given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
+        assertThat(response.getStatusCode()).isEqualTo(status.value());
+        assertThat(response.as(String.class)).contains(error);
+    }
+
+    private static void deleteDog(long id) {
+        given().when().delete("/dog/{id}", id);
     }
 
     private static void assertDogsEqual(DogDto actual, DogDto expected) {

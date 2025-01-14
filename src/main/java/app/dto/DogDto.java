@@ -1,5 +1,8 @@
 package app.dto;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 import java.util.Date;
@@ -8,10 +11,16 @@ import static io.qala.datagen.RandomShortApi.*;
 
 public class DogDto {
     private Long id;
+    @NotNull(message = "Name should be specified.")
     @Size(min = 1, max = 100, message = "Name size should be between 1 and 100.")
     private String name;
+    @Past(message = "Birth date should be in the past.")
     private Date birthDate;
+    @NotNull(message = "Height should be specified.")
+    @DecimalMin(value = "0", inclusive = false, message = "Height should be greater than 0.")
     private Double height;
+    @NotNull(message = "Weight should be specified.")
+    @DecimalMin(value = "0", inclusive = false, message = "Weight should be greater than 0.")
     private Double weight;
 
     public static DogDto random() {
