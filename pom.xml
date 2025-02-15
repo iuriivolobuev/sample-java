@@ -9,7 +9,8 @@
   <version>1.0.0</version>
 
   <properties>
-    <tomcat.version>9.0.80</tomcat.version><!--The latest Tomcat version before they moved to Jakarta EE.-->
+    <tomcat.version>11.0.3</tomcat.version>
+    <spring.version>6.2.3</spring.version>
   </properties>
 
   <dependencies>
@@ -27,7 +28,7 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-webmvc</artifactId>
-      <version>5.3.29</version>
+      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -36,9 +37,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.hibernate</groupId>
+      <groupId>org.hibernate.validator</groupId>
       <artifactId>hibernate-validator</artifactId>
-      <version>5.4.3.Final</version>
+      <version>8.0.2.Final</version>
     </dependency>
 
     <dependency>
@@ -79,7 +80,13 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>spring-mock-mvc</artifactId>
-      <version>5.3.0</version>
+      <version>5.5.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>${spring.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -99,6 +106,9 @@
         <configuration>
           <release>21</release>
           <encoding>UTF-8</encoding>
+          <compilerArgs>
+            <arg>-parameters</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>
