@@ -19,13 +19,13 @@ class DogControllerMockMvc {
         RestAssuredMockMvc.requestSpecification = new MockMvcRequestSpecBuilder().setContentType(ContentType.JSON).build();
     }
 
-    DogDto getDog(long id) {
+    DogDto getDog(String id) {
         MockMvcResponse response = given().get("/dog/{id}", id);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         return response.as(DogDto.class);
     }
 
-    void getDogWithError(long id, HttpStatus status, String error) {
+    void getDogWithError(String id, HttpStatus status, String error) {
         MockMvcResponse response = given().get("/dog/{id}", id);
         assertThat(response.getStatusCode()).isEqualTo(status.value());
         assertThat(response.as(String.class)).contains(error);
@@ -49,17 +49,17 @@ class DogControllerMockMvc {
         assertThat(response.as(String.class)).contains(error);
     }
 
-    void updateDog(long id, DogDto dog) {
+    void updateDog(String id, DogDto dog) {
         given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
     }
 
-    void updateDogWithError(long id, DogDto dog, HttpStatus status, String error) {
+    void updateDogWithError(String id, DogDto dog, HttpStatus status, String error) {
         MockMvcResponse response = given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
         assertThat(response.getStatusCode()).isEqualTo(status.value());
         assertThat(response.as(String.class)).contains(error);
     }
 
-    void deleteDog(long id) {
+    void deleteDog(String id) {
         given().when().delete("/dog/{id}", id);
     }
 }

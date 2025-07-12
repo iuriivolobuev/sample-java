@@ -11,7 +11,7 @@ import java.util.Date;
 import static io.qala.datagen.RandomShortApi.*;
 
 public class DogDto {
-    private Long id;
+    private String id;
     @NotNull(message = "Name should be specified.")
     @Size(min = 1, max = 100, message = "Name size should be between 1 and 100.")
     private String name;
@@ -34,11 +34,11 @@ public class DogDto {
         return dog;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public DogDto setId(Long id) {
+    public DogDto setId(String id) {
         this.id = id;
         return this;
     }

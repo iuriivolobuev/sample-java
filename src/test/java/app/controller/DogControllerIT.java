@@ -16,7 +16,7 @@ public class DogControllerIT {
     @Test
     public void createsDog() {
         DogDto newDog = DogDto.random();
-        long id = createDog(newDog).getId();
+        String id = createDog(newDog).getId();
 
         DogDto loaded = getDog(id);
         assertDogsEqual(loaded, newDog);
@@ -30,7 +30,7 @@ public class DogControllerIT {
 
     @Test
     public void updatesDog() {
-        long id = createDog(DogDto.random()).getId();
+        String id = createDog(DogDto.random()).getId();
         DogDto toUpdate = DogDto.random();
         updateDog(id, toUpdate);
 
@@ -40,42 +40,42 @@ public class DogControllerIT {
 
     @Test
     public void errs_ifDogIsNotValid_whenUpdatingDog() {
-        long id = createDog(DogDto.random()).getId();
+        String id = createDog(DogDto.random()).getId();
         DogDto notValid = DogDto.random().setName(alphanumeric(101));
         updateDogWithError(id, notValid, HttpStatus.BAD_REQUEST, "Name size should be between 1 and 100.");
     }
 
     @Test
     public void errs_ifDogDoesNotExist_whenUpdatingDog() {
-        updateDogWithError(-1, DogDto.random(), HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[-1].");
+        updateDogWithError("-1", DogDto.random(), HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[-1].");
     }
 
     @Test
     public void deletesDog() {
-        long id = createDog(DogDto.random()).getId();
+        String id = createDog(DogDto.random()).getId();
 
         DogDto actual = getDog(id);
         assertThat(actual).isNotNull();
 
         deleteDog(id);
-        getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[%d].".formatted(id));
+        getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[%s].".formatted(id));
     }
 
     @Test
     public void getsAllDogs() {
-        long id1 = createDog(DogDto.random()).getId();
-        long id2 = createDog(DogDto.random()).getId();
-        List<Long> ids = getAllDogs().stream().map(DogDto::getId).toList();
+        String id1 = createDog(DogDto.random()).getId();
+        String id2 = createDog(DogDto.random()).getId();
+        List<String> ids = getAllDogs().stream().map(DogDto::getId).toList();
         assertThat(ids).contains(id1, id2);
     }
 
-    private static DogDto getDog(long id) {
+    private static DogDto getDog(String id) {
         Response response = given().get("/dog/{id}", id);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
         return response.as(DogDto.class);
     }
 
-    private static void getDogWithError(long id, HttpStatus status, String error) {
+    private static void getDogWithError(String id, HttpStatus status, String error) {
         Response response = given().get("/dog/{id}", id);
         assertThat(response.getStatusCode()).isEqualTo(status.value());
         assertThat(response.as(String.class)).contains(error);
@@ -99,17 +99,17 @@ public class DogControllerIT {
         assertThat(response.as(String.class)).contains(error);
     }
 
-    private static void updateDog(long id, DogDto dog) {
+    private static void updateDog(String id, DogDto dog) {
         given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
     }
 
-    private static void updateDogWithError(long id, DogDto dog, HttpStatus status, String error) {
+    private static void updateDogWithError(String id, DogDto dog, HttpStatus status, String error) {
         Response response = given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
         assertThat(response.getStatusCode()).isEqualTo(status.value());
         assertThat(response.as(String.class)).contains(error);
     }
 
-    private static void deleteDog(long id) {
+    private static void deleteDog(String id) {
         given().when().delete("/dog/{id}", id);
     }
 

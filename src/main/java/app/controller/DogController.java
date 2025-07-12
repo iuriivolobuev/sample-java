@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class DogController {
     private static final AtomicLong DOG_ID_GENERATOR = new AtomicLong(-1L);
-    private static final Map<Long, DogDto> DOGS = new ConcurrentHashMap<>();
+    private static final Map<String, DogDto> DOGS = new ConcurrentHashMap<>();
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final DogService dogService;
@@ -35,7 +35,7 @@ public class DogController {
     }
 
     @GetMapping("/dog/{id}")
-    public DogDto getDog(@PathVariable long id) {
+    public DogDto getDog(@PathVariable String id) {
         logger.info("Getting a dog: id=[{}].", id);
         DogDto dog = DOGS.get(id);
         if (dog == null) {
@@ -47,13 +47,13 @@ public class DogController {
     @PostMapping("/dog")
     public DogDto createDog(@RequestBody @Valid DogDto dog) {
         logger.info("Creating a dog: [{}].", dog);
-        dog.setId(DOG_ID_GENERATOR.incrementAndGet());
+        dog.setId(nextId());
         DOGS.put(dog.getId(), dog);
         return dog;
     }
 
     @PutMapping("/dog/{id}")
-    public DogDto updateDog(@PathVariable long id, @RequestBody @Valid DogDto dog) {
+    public DogDto updateDog(@PathVariable String id, @RequestBody @Valid DogDto dog) {
         logger.info("Updating a dog: id=[{}].", id);
         if (!DOGS.containsKey(id)) {
             throw new ObjectNotFoundException(DogDto.class, id);
@@ -64,7 +64,7 @@ public class DogController {
     }
 
     @DeleteMapping("/dog/{id}")
-    public void deleteDog(@PathVariable long id) {
+    public void deleteDog(@PathVariable String id) {
         logger.info("Deleting a dog: id=[{}].", id);
         DOGS.remove(id);
     }
@@ -77,5 +77,9 @@ public class DogController {
     @ExceptionHandler(ObjectNotFoundException.class)
     public ResponseEntity<String> processObjectNotFoundException(ObjectNotFoundException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    private static String nextId() {
+        return String.valueOf(DOG_ID_GENERATOR.incrementAndGet());
     }
 }
