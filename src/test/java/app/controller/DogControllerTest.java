@@ -76,7 +76,7 @@ public class DogControllerTest {
 
     private static void assertDogsEqual(DogDto actual, DogDto expected) {
         assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getBirthDate()).isEqualTo(expected.getBirthDate());
+        assertThat(actual.getTimeOfBirth()).isEqualTo(expected.getTimeOfBirth());
         assertThat(actual.getHeight()).isEqualTo(expected.getHeight());
         assertThat(actual.getWeight()).isEqualTo(expected.getWeight());
     }

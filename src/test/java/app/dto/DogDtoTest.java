@@ -5,8 +5,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.Test;
 
-import java.time.ZonedDateTime;
-import java.util.Date;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 import static io.qala.datagen.RandomShortApi.alphanumeric;
@@ -39,20 +38,20 @@ public class DogDtoTest {
     }
 
     @Test
-    public void errs_ifBirthDateIsInFuture() {
-        Date date = new Date(ZonedDateTime.now().plusSeconds(1).toInstant().toEpochMilli());
-        assertHasOneError(VALIDATOR.validate(dog().setBirthDate(date)), "Birth date should be in the past.");
+    public void errs_ifTimeOfBirthIsInFuture() {
+        OffsetDateTime date = OffsetDateTime.now().plusSeconds(1);
+        assertHasOneError(VALIDATOR.validate(dog().setTimeOfBirth(date)), "Time of birth should be in the past.");
     }
 
     @Test
-    public void doesNotErr_ifBirthDateIsInPast() {
-        Date date = new Date(ZonedDateTime.now().minusSeconds(1).toInstant().toEpochMilli());
-        assertHasNoError(VALIDATOR.validate(dog().setBirthDate(date)));
+    public void doesNotErr_ifTimeOfBirthIsInPast() {
+        OffsetDateTime timeOfBirth = OffsetDateTime.now().minusSeconds(1);
+        assertHasNoError(VALIDATOR.validate(dog().setTimeOfBirth(timeOfBirth)));
     }
 
     @Test
-    public void doesNotErr_ifBirthDateIsNull() {
-        assertHasNoError(VALIDATOR.validate(dog().setBirthDate(null)));
+    public void doesNotErr_ifTimeOfBirthIsNull() {
+        assertHasNoError(VALIDATOR.validate(dog().setTimeOfBirth(null)));
     }
 
     @Test
