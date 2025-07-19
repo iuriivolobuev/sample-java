@@ -1,5 +1,6 @@
 package app.dto;
 
+import app.domain.Dog;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 
 import static io.qala.datagen.RandomShortApi.*;
 
@@ -34,6 +36,28 @@ public class DogDto {
         dog.height = positiveDouble();
         dog.weight = positiveDouble();
         return dog;
+    }
+
+    public static DogDto fromDomain(Dog domain) {
+        return new DogDto()
+                .setId(domain.getId())
+                .setName(domain.getName())
+                .setTimeOfBirth(domain.getTimeOfBirth())
+                .setHeight(domain.getHeight())
+                .setWeight(domain.getWeight());
+    }
+
+    public static Collection<DogDto> fromDomain(Collection<Dog> dogs) {
+        return dogs.stream().map(DogDto::fromDomain).toList();
+    }
+
+    public Dog toDomain() {
+        return new Dog()
+                .setId(id)
+                .setName(name)
+                .setTimeOfBirth(timeOfBirth)
+                .setHeight(height)
+                .setWeight(weight);
     }
 
     public String getId() {

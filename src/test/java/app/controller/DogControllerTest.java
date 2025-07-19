@@ -52,7 +52,7 @@ public class DogControllerTest {
 
     @Test
     public void errs_ifDogDoesNotExist_whenUpdatingDog() {
-        sut.updateDogWithError("-1", DogDto.random(), HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[-1].");
+        sut.updateDogWithError("-1", DogDto.random(), HttpStatus.NOT_FOUND, "Couldn't find object [Dog] with id=[-1].");
     }
 
     @Test
@@ -63,7 +63,7 @@ public class DogControllerTest {
         assertThat(actual).isNotNull();
 
         sut.deleteDog(id);
-        sut.getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [DogDto] with id=[%s].".formatted(id));
+        sut.getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [Dog] with id=[%s].".formatted(id));
     }
 
     @Test
