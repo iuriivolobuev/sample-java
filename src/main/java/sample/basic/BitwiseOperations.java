@@ -27,6 +27,18 @@ class BitwiseOperations {
         return -(value + 1);
     }
 
+    public static boolean isPowerOfTwo_v1(int x) {
+        int curr = x - 1;
+        while ((curr & 1) == 1) {
+            curr = curr >> 1;
+        }
+        return curr == 0;
+    }
+
+    public static boolean isPowerOfTwo_v2(int x) {
+        return ((x - 1) & x) == 0;
+    }
+
     private static void printBits(int value) {
         String bits = StringUtils.leftPad(Integer.toBinaryString(value), 32, "0");
         System.out.printf("%s (value=%d)%n", bits, value);

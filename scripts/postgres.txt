@@ -1,3 +1,0 @@
-sudo su - postgres
-/Library/PostgreSQL/16/bin/pg_ctl -D /Library/PostgreSQL/16/data start
-/Library/PostgreSQL/16/bin/pg_ctl -D /Library/PostgreSQL/16/data stop
