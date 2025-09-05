@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings("unused"/*one of the alternative implementations*/)
 class InMemoryDogDao implements DogDao {
     private static final Map<String, Dog> DOGS = new ConcurrentHashMap<>();
 

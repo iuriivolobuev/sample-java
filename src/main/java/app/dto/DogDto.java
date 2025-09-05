@@ -6,13 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 
-import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.Collection;
-
-import static io.qala.datagen.RandomShortApi.*;
 
 public class DogDto {
     private String id;
@@ -29,13 +24,7 @@ public class DogDto {
     private Double weight;
 
     public static DogDto random() {
-        DogDto dog = new DogDto();
-        dog.name = alphanumeric(1, 100);
-        Instant randomInstant = Instant.ofEpochMilli(Long(ZonedDateTime.now().withYear(2000).toInstant().toEpochMilli(), System.currentTimeMillis()));
-        dog.timeOfBirth = nullOr(OffsetDateTime.ofInstant(randomInstant, ZoneId.systemDefault()));
-        dog.height = positiveDouble();
-        dog.weight = positiveDouble();
-        return dog;
+        return fromDomain(Dog.random());
     }
 
     public static DogDto fromDomain(Dog domain) {

@@ -1,6 +1,11 @@
 package app.domain;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+import static io.qala.datagen.RandomShortApi.*;
 
 public class Dog {
     private String id;
@@ -8,6 +13,19 @@ public class Dog {
     private OffsetDateTime timeOfBirth;
     private Double height;
     private Double weight;
+
+    public static Dog random() {
+        return new Dog()
+                .setName(alphanumeric(1, 100))
+                .setTimeOfBirth(randomOffsetDateTime())
+                .setHeight(positiveDouble())
+                .setWeight(positiveDouble());
+    }
+
+    private static OffsetDateTime randomOffsetDateTime() {
+        Instant randomInstant = Instant.ofEpochMilli(Long(ZonedDateTime.now().withYear(2000).toInstant().toEpochMilli(), System.currentTimeMillis()));
+        return nullOr(OffsetDateTime.ofInstant(randomInstant, ZoneId.systemDefault()));
+    }
 
     public String getId() {
         return id;
