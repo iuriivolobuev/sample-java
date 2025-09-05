@@ -20,10 +20,15 @@
 
   <bean id="dogService" class="app.service.DogService"/>
 
-  <bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
+  <!--<bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
     <property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"/>
     <property name="user" value="sa"/>
     <property name="password" value=""/>
+  </bean>-->
+  <bean id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
+    <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+    <property name="user" value="postgres"/>
+    <property name="password" value="root"/>
   </bean>
   <bean class="app.dao.JdbcConnectionHolder"/>
   <bean id="dogDao" class="app.dao.JdbcDogDao" init-method="createTables"/>
