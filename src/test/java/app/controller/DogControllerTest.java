@@ -9,8 +9,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
+import static app.TestUtils.assertDatesEqual;
 import static io.qala.datagen.RandomShortApi.alphanumeric;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @MockMvcTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -60,7 +64,7 @@ public class DogControllerTest {
         String id = sut.createDog(DogDto.random()).getId();
 
         DogDto actual = sut.getDog(id);
-        assertThat(actual).isNotNull();
+        assertNotNull(actual);
 
         sut.deleteDog(id);
         sut.getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [Dog] with id=[%s].".formatted(id));
@@ -71,13 +75,13 @@ public class DogControllerTest {
         String id1 = sut.createDog(DogDto.random()).getId();
         String id2 = sut.createDog(DogDto.random()).getId();
         List<String> ids = sut.getAllDogs().stream().map(DogDto::getId).toList();
-        assertThat(ids).contains(id1, id2);
+        assertThat(ids, hasItems(id1, id2));
     }
 
     private static void assertDogsEqual(DogDto actual, DogDto expected) {
-        assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getTimeOfBirth()).isEqualTo(expected.getTimeOfBirth());
-        assertThat(actual.getHeight()).isEqualTo(expected.getHeight());
-        assertThat(actual.getWeight()).isEqualTo(expected.getWeight());
+        assertEquals(expected.getName(), actual.getName());
+        assertDatesEqual(expected.getTimeOfBirth(), actual.getTimeOfBirth());
+        assertEquals(expected.getHeight(), actual.getHeight());
+        assertEquals(expected.getWeight(), actual.getWeight());
     }
 }
