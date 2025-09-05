@@ -9,4 +9,6 @@
   <root level="INFO">
     <appender-ref ref="console"/>
   </root>
+
+  <logger name="org.postgresql" level="trace"/>
 </configuration>

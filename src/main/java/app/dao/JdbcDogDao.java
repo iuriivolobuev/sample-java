@@ -2,6 +2,7 @@ package app.dao;
 
 import app.domain.Dog;
 import app.domain.ObjectNotFoundException;
+import org.postgresql.ds.PGSimpleDataSource;
 
 import java.sql.*;
 import java.time.OffsetDateTime;
@@ -13,10 +14,10 @@ class JdbcDogDao implements DogDao {
     private static final String CREATE_TABLES_DDL = """
             create table dog (
               id varchar(36) primary key,
-              name nvarchar(1000) not null,
+              name varchar(1000) not null,
               time_of_birth timestamp,
-              height double,
-              weight double
+              height double precision,
+              weight double precision
             );
             """;
 
@@ -104,12 +105,12 @@ class JdbcDogDao implements DogDao {
 
     @SuppressWarnings("unused"/*invoked by spring as init method*/)
     void createTables() {
-        Connection connection = connections.getCurrentConnection();
+        /*Connection connection = connections.getCurrentConnection();
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(CREATE_TABLES_DDL);
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
     }
 
     private static Dog extractDogFromRecord(ResultSet rs) throws SQLException {
