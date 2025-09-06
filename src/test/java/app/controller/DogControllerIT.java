@@ -8,9 +8,14 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
+import static app.TestUtils.assertDatesEqual;
 import static io.qala.datagen.RandomShortApi.alphanumeric;
 import static io.restassured.RestAssured.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class DogControllerIT {
     @Test
@@ -55,7 +60,7 @@ public class DogControllerIT {
         String id = createDog(DogDto.random()).getId();
 
         DogDto actual = getDog(id);
-        assertThat(actual).isNotNull();
+        assertNotNull(actual);
 
         deleteDog(id);
         getDogWithError(id, HttpStatus.NOT_FOUND, "Couldn't find object [Dog] with id=[%s].".formatted(id));
@@ -66,37 +71,37 @@ public class DogControllerIT {
         String id1 = createDog(DogDto.random()).getId();
         String id2 = createDog(DogDto.random()).getId();
         List<String> ids = getAllDogs().stream().map(DogDto::getId).toList();
-        assertThat(ids).contains(id1, id2);
+        assertThat(ids, hasItems(id1, id2));
     }
 
     private static DogDto getDog(String id) {
         Response response = given().get("/dog/{id}", id);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return response.as(DogDto.class);
     }
 
     private static void getDogWithError(String id, HttpStatus status, String error) {
         Response response = given().get("/dog/{id}", id);
-        assertThat(response.getStatusCode()).isEqualTo(status.value());
-        assertThat(response.as(String.class)).contains(error);
+        assertEquals(status.value(), response.getStatusCode());
+        assertThat(response.as(String.class), containsString(error));
     }
 
     private static List<DogDto> getAllDogs() {
         Response response = given().get("/dog");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return List.of(response.as(DogDto[].class));
     }
 
     private static DogDto createDog(DogDto dog) {
         Response response = given().contentType(ContentType.JSON).body(dog).when().post("/dog");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return response.as(DogDto.class);
     }
 
     private static void createDogWithError(DogDto dog, HttpStatus status, String error) {
         Response response = given().contentType(ContentType.JSON).body(dog).when().post("/dog");
-        assertThat(response.getStatusCode()).isEqualTo(status.value());
-        assertThat(response.as(String.class)).contains(error);
+        assertEquals(status.value(), response.getStatusCode());
+        assertThat(response.as(String.class), containsString(error));
     }
 
     private static void updateDog(String id, DogDto dog) {
@@ -105,8 +110,8 @@ public class DogControllerIT {
 
     private static void updateDogWithError(String id, DogDto dog, HttpStatus status, String error) {
         Response response = given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
-        assertThat(response.getStatusCode()).isEqualTo(status.value());
-        assertThat(response.as(String.class)).contains(error);
+        assertEquals(status.value(), response.getStatusCode());
+        assertThat(response.as(String.class), containsString(error));
     }
 
     private static void deleteDog(String id) {
@@ -114,9 +119,9 @@ public class DogControllerIT {
     }
 
     private static void assertDogsEqual(DogDto actual, DogDto expected) {
-        assertThat(actual.getName()).isEqualTo(expected.getName());
-        assertThat(actual.getTimeOfBirth()).isEqualTo(expected.getTimeOfBirth());
-        assertThat(actual.getHeight()).isEqualTo(expected.getHeight());
-        assertThat(actual.getWeight()).isEqualTo(expected.getWeight());
+        assertEquals(expected.getName(), actual.getName());
+        assertDatesEqual(expected.getTimeOfBirth(), actual.getTimeOfBirth());
+        assertEquals(expected.getHeight(), actual.getHeight());
+        assertEquals(expected.getWeight(), actual.getWeight());
     }
 }

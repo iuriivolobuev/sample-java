@@ -10,7 +10,8 @@ import java.util.Set;
 
 import static io.qala.datagen.RandomShortApi.alphanumeric;
 import static io.qala.datagen.RandomShortApi.positiveDouble;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class DogDtoTest {
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
@@ -89,11 +90,11 @@ public class DogDtoTest {
     }
 
     private static void assertHasNoError(Set<ConstraintViolation<DogDto>> violations) {
-        assertThat(violations).isEmpty();
+        assertTrue(violations.isEmpty());
     }
 
     private static void assertHasOneError(Set<ConstraintViolation<DogDto>> violations, String error) {
-        assertThat(violations.size()).isEqualTo(1);
-        assertThat(violations.iterator().next().getMessage()).isEqualTo(error);
+        assertEquals(1, violations.size());
+        assertEquals(error, violations.iterator().next().getMessage());
     }
 }

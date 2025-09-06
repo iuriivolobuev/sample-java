@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.UUID;
 
+import static app.TestUtils.assertDatesEqual;
 import static io.qala.datagen.RandomShortApi.unicode;
 import static io.qala.datagen.RandomValue.length;
 import static io.qala.datagen.StringModifier.Impls.suffix;
@@ -48,9 +49,7 @@ public class JdbcDogDaoTest {
     private static void assertDogsEqual(Dog expected, Dog actual) {
         assertEquals(expected.getId(), actual.getId());
         assertEquals(expected.getName(), actual.getName());
-        if (expected.getTimeOfBirth() != null) {
-            assertEquals(expected.getTimeOfBirth().toInstant(), actual.getTimeOfBirth().toInstant());
-        }
+        assertDatesEqual(expected.getTimeOfBirth(), actual.getTimeOfBirth());
         assertEquals(expected.getHeight(), actual.getHeight());
         assertEquals(expected.getWeight(), actual.getWeight());
     }

@@ -11,7 +11,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 class DogControllerMockMvc {
     DogControllerMockMvc(MockMvc mvc) {
@@ -21,32 +23,32 @@ class DogControllerMockMvc {
 
     DogDto getDog(String id) {
         MockMvcResponse response = given().get("/dog/{id}", id);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return response.as(DogDto.class);
     }
 
     void getDogWithError(String id, HttpStatus status, String error) {
         MockMvcResponse response = given().get("/dog/{id}", id);
-        assertThat(response.getStatusCode()).isEqualTo(status.value());
-        assertThat(response.as(String.class)).contains(error);
+        assertEquals(status.value(), response.getStatusCode());
+        assertThat(response.as(String.class), containsString(error));
     }
 
     List<DogDto> getAllDogs() {
         MockMvcResponse response = given().get("/dog");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return List.of(response.as(DogDto[].class));
     }
 
     DogDto createDog(DogDto dog) {
         MockMvcResponse response = given().body(dog).post("/dog");
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
+        assertEquals(HttpStatus.OK.value(), response.getStatusCode());
         return response.as(DogDto.class);
     }
 
     void createDogWithError(DogDto dog, HttpStatus status, String error) {
         MockMvcResponse response = given().contentType(ContentType.JSON).body(dog).when().post("/dog");
-        assertThat(response.getStatusCode()).isEqualTo(status.value());
-        assertThat(response.as(String.class)).contains(error);
+        assertEquals(status.value(), response.getStatusCode());
+        assertThat(response.as(String.class), containsString(error));
     }
 
     void updateDog(String id, DogDto dog) {
@@ -55,8 +57,8 @@ class DogControllerMockMvc {
 
     void updateDogWithError(String id, DogDto dog, HttpStatus status, String error) {
         MockMvcResponse response = given().contentType(ContentType.JSON).body(dog).when().put("/dog/{id}", id);
-        assertThat(response.getStatusCode()).isEqualTo(status.value());
-        assertThat(response.as(String.class)).contains(error);
+        assertEquals(status.value(), response.getStatusCode());
+        assertThat(response.as(String.class), containsString(error));
     }
 
     void deleteDog(String id) {
