@@ -25,7 +25,14 @@
     <property name="user" value="sa"/>
     <property name="password" value=""/>
   </bean>
-  <bean class="app.dao.JdbcConnectionHolder"/>
-  <bean id="dogDao" class="app.dao.JdbcDogDao" init-method="createTables"/>
 
+  <bean class="org.flywaydb.core.api.configuration.ClassicConfiguration">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="locations" value="migrations"/>
+    <property name="table" value="schema_version"/>
+  </bean>
+  <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate"/>
+
+  <bean class="app.dao.JdbcConnectionHolder" depends-on="flyway"/>
+  <bean id="dogDao" class="app.dao.JdbcDogDao"/>
 </beans>

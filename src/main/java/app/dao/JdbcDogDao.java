@@ -10,16 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 class JdbcDogDao implements DogDao {
-    private static final String CREATE_TABLES_DDL = """
-            create table dog (
-              id varchar(36) primary key,
-              name nvarchar(1000) not null,
-              time_of_birth timestamp,
-              height double,
-              weight double
-            );
-            """;
-
     private final JdbcConnectionHolder connections;
 
     public JdbcDogDao(JdbcConnectionHolder connections) {
@@ -31,7 +21,7 @@ class JdbcDogDao implements DogDao {
         Collection<Dog> result = new ArrayList<>();
         Connection connection = connections.getCurrentConnection();
         try (Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("select * from dog");
+            ResultSet rs = statement.executeQuery("select * from DOG");
             while (rs.next()) {
                 result.add(extractDogFromRecord(rs));
             }
@@ -44,7 +34,7 @@ class JdbcDogDao implements DogDao {
     @Override
     public Dog getDog(String id) {
         Connection connection = connections.getCurrentConnection();
-        try (PreparedStatement statement = connection.prepareStatement("select * from dog where id = ?")) {
+        try (PreparedStatement statement = connection.prepareStatement("select * from DOG where ID = ?")) {
             statement.setString(1, id);
             ResultSet rs = statement.executeQuery();
             if (rs.next()) {
@@ -59,7 +49,7 @@ class JdbcDogDao implements DogDao {
     @Override
     public Dog createDog(Dog dog) {
         Connection connection = connections.getCurrentConnection();
-        try (PreparedStatement statement = connection.prepareStatement("insert into dog values (?, ?, ?, ?, ?)")) {
+        try (PreparedStatement statement = connection.prepareStatement("insert into DOG values (?, ?, ?, ?, ?)")) {
             statement.setString(1, dog.getId());
             statement.setString(2, dog.getName());
             statement.setTimestamp(3, toTimestamp(dog.getTimeOfBirth()));
@@ -76,7 +66,7 @@ class JdbcDogDao implements DogDao {
     public Dog updateDog(Dog dog) {
         Connection connection = connections.getCurrentConnection();
         try (PreparedStatement statement = connection
-                .prepareStatement("update dog set name=?, time_of_birth=?, height=?, weight=? where id=?")) {
+                .prepareStatement("update DOG set NAME=?, TIME_OF_BIRTH=?, HEIGHT=?, WEIGHT=? where ID=?")) {
             statement.setString(1, dog.getName());
             statement.setTimestamp(2, toTimestamp(dog.getTimeOfBirth()));
             statement.setDouble(3, dog.getHeight());
@@ -94,7 +84,7 @@ class JdbcDogDao implements DogDao {
     @Override
     public boolean deleteDog(String id) {
         Connection connection = connections.getCurrentConnection();
-        try (PreparedStatement statement = connection.prepareStatement("delete from dog where id=?")) {
+        try (PreparedStatement statement = connection.prepareStatement("delete from DOG where ID=?")) {
             statement.setString(1, id);
             return statement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -102,23 +92,13 @@ class JdbcDogDao implements DogDao {
         }
     }
 
-    @SuppressWarnings("unused"/*invoked by spring as init method*/)
-    void createTables() {
-        Connection connection = connections.getCurrentConnection();
-        try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(CREATE_TABLES_DDL);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     private static Dog extractDogFromRecord(ResultSet rs) throws SQLException {
         return new Dog()
-                .setId(rs.getString("id"))
-                .setName(rs.getString("name"))
-                .setTimeOfBirth(fromTimestamp(rs.getTimestamp("time_of_birth")))
-                .setHeight(rs.getDouble("height"))
-                .setWeight(rs.getDouble("weight"));
+                .setId(rs.getString("ID"))
+                .setName(rs.getString("NAME"))
+                .setTimeOfBirth(fromTimestamp(rs.getTimestamp("TIME_OF_BIRTH")))
+                .setHeight(rs.getDouble("HEIGHT"))
+                .setWeight(rs.getDouble("WEIGHT"));
     }
 
     private static Timestamp toTimestamp(OffsetDateTime offsetDateTime) {
