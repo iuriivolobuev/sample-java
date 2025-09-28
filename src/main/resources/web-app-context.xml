@@ -18,7 +18,11 @@
   <bean class="app.controller.DeckController"/>
   <bean class="app.controller.DogController"/>
 
-  <bean id="dogService" class="app.service.DogService"/>
+  <bean class="app.service.TransactionalDogService">
+    <constructor-arg>
+      <bean class="app.service.DbDogService"/>
+    </constructor-arg>
+  </bean>
 
   <bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
     <property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"/>
