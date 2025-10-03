@@ -33,6 +33,12 @@ public class DbDogService implements DogService {
     }
 
     @Override
+    public Dog updateDogs(Dog dog1, Dog dog2) {
+        return null;
+    }
+
+
+    @Override
     public boolean deleteDog(String id) {
         return dogDao.deleteDog(id);
     }

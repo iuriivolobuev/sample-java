@@ -13,5 +13,7 @@ public interface DogService {
 
     Dog updateDog(Dog dog);
 
+    Dog updateDogs(Dog dog1, Dog dog2);
+
     boolean deleteDog(String id);
 }
