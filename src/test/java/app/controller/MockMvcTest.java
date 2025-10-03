@@ -23,5 +23,4 @@ import java.lang.annotation.Target;
 @WebAppConfiguration
 @ContextConfiguration({"classpath:/test-context.xml", "classpath:/web-app-context.xml"})
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
-public @interface MockMvcTest {
-}
+public @interface MockMvcTest {}

@@ -18,7 +18,6 @@ import static org.junit.Assert.assertEquals;
 @MockMvcTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class JdbcDogDaoTest {
-
     @Autowired
     private DogDao dao;
 
