@@ -38,7 +38,7 @@ push_handler() {
   git push ${force} origin ${head}:refs/heads/${branch}
 }
 pushwip() {
-  pushf iura_wip
+  pushf iura-wip
 }
 
 # refs

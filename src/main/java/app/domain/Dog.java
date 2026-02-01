@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 import static io.qala.datagen.RandomShortApi.*;
 
@@ -34,6 +35,10 @@ public class Dog {
     public Dog setId(String id) {
         this.id = id;
         return this;
+    }
+
+    public Dog setId(UUID id) {
+        return setId(id.toString());
     }
 
     public String getName() {
