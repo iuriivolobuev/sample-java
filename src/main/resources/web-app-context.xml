@@ -24,15 +24,15 @@
     </constructor-arg>
   </bean>
 
-  <bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
-    <property name="url" value="jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1"/>
-    <property name="user" value="sa"/>
-    <property name="password" value=""/>
+  <bean id="dataSource" class="org.postgresql.ds.PGSimpleDataSource">
+    <property name="url" value="jdbc:postgresql://localhost:5432/dev"/>
+    <property name="user" value="devuser"/>
+    <property name="password" value="devpass"/>
   </bean>
 
   <bean class="org.flywaydb.core.api.configuration.ClassicConfiguration">
     <property name="dataSource" ref="dataSource"/>
-    <property name="locations" value="migrations"/>
+    <property name="locations" value="db/migrations"/>
     <property name="table" value="schema_version"/>
   </bean>
   <bean id="flyway" class="org.flywaydb.core.Flyway" init-method="migrate"/>

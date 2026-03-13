@@ -2,9 +2,9 @@ package app.dao;
 
 import app.controller.MockMvcTest;
 import app.domain.Dog;
-import org.h2.jdbc.JdbcSQLTransactionRollbackException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -70,8 +70,8 @@ public class JdbcDogDaoTest {
             f2.get();
         });
 
-        JdbcSQLTransactionRollbackException rollbackException = findCause(exception, JdbcSQLTransactionRollbackException.class);
-        assertThat(rollbackException.getMessage(), startsWith("Deadlock detected. The current transaction was rolled back."));
+        PSQLException pgException = findCause(exception, PSQLException.class);
+        assertThat(pgException.getMessage(), startsWith("ERROR: deadlock detected"));
 
         executorService.shutdownNow();
     }
