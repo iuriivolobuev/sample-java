@@ -20,6 +20,6 @@ import java.lang.annotation.Target;
  * </ul>
  */
 @WebAppConfiguration
-@ContextConfiguration({"classpath:/test-context.xml", "classpath:/web-context.xml"})
+@ContextConfiguration({"classpath:/test-context.xml", "classpath:/dao-context.xml", "classpath:/web-context.xml"})
 @Target(ElementType.TYPE) @Retention(RetentionPolicy.RUNTIME)
 public @interface MockMvcTest {}
