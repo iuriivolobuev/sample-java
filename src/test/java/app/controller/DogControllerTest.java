@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.MockMvcTest;
 import app.dto.DogDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;

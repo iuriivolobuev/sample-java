@@ -1,4 +1,4 @@
-package app.controller;
+package app;
 
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;

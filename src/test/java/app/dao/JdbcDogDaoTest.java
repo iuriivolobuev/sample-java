@@ -1,6 +1,6 @@
 package app.dao;
 
-import app.controller.MockMvcTest;
+import app.JdbcDaoTest;
 import app.domain.Dog;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-@MockMvcTest
+@JdbcDaoTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @SuppressWarnings("resource")
 public class JdbcDogDaoTest {
