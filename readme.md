@@ -1,4 +1,3 @@
-Sample Java
------------
+# Samples
 
-Sample project for learning and experimentation.
+Personal samples for learning and experimentation.
