@@ -72,6 +72,12 @@
       </dependency>
 
       <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>dynamodb-enhanced</artifactId>
+        <version>2.32.20</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>2.0.9</version>
