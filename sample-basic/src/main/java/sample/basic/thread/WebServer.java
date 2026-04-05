@@ -1,4 +1,4 @@
-package sample.webapp.sample.basic.concurrency;
+package sample.basic.thread;
 
 import java.io.BufferedReader;
 import java.io.IOException;

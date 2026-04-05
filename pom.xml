@@ -10,6 +10,9 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>sample-basic</module>
+    <module>sample-dynamodb</module>
+    <module>sample-war</module>
     <module>sample-webapp</module>
   </modules>
 

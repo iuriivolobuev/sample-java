@@ -1,4 +1,4 @@
-package sample.webapp.sample.basic.concurrency;
+package sample.basic.thread;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

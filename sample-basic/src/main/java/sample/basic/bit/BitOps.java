@@ -1,8 +1,8 @@
-package sample.webapp.sample.basic;
+package sample.basic.bit;
 
 import org.apache.commons.lang3.StringUtils;
 
-class BitwiseOperations {
+class BitOps {
     public static void main(String[] args) {
         printBits(0);
         printBits(1);

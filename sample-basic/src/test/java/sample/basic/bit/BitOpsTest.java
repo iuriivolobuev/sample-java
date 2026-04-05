@@ -1,4 +1,4 @@
-package sample.webapp.sample.basic;
+package sample.basic.bit;
 
 import org.junit.Test;
 
@@ -6,9 +6,9 @@ import java.util.Set;
 
 import static io.qala.datagen.RandomShortApi.integer;
 import static org.junit.Assert.assertEquals;
-import static sample.webapp.sample.basic.BitwiseOperations.*;
+import static sample.basic.bit.BitOps.*;
 
-public class BitwiseOperationsTest {
+public class BitOpsTest {
     @Test
     public void invertsAllBits() {
         assertAllBitsInverted(0);

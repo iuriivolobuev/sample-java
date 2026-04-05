@@ -1,4 +1,4 @@
-package sample.webapp.sample.basic.concurrency;
+package sample.basic.thread;
 
 import java.io.IOException;
 import java.net.URL;
