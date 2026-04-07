@@ -1,7 +1,10 @@
 package sample.basic.thread;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,20 +21,26 @@ import java.util.concurrent.Executors;
  * - in server.xml: maxThreads = 5, maxConnections = 6, acceptCount = 10
  */
 class TomcatClient {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TomcatClient.class);
+
+    /**
+     * Before running this, run sample.webapp.web.EmbeddedTomcatStarter#main (also, add some delay to the endpoint).
+     */
     public static void main(String[] args) {
         int threadCount = 20;
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        for (int i = 0; i < threadCount; i++) {
-            int connectionIndex = i;
-            executorService.execute(() -> {
-                try {
-                    new URL("http://localhost:8080/with-delay").openConnection().getInputStream();
-                    System.out.println(String.format("Connection [%d] was successfully performed.", connectionIndex));
-                } catch (IOException e) {
-                    System.out.println(String.format("Connection [%d] was failed: ", connectionIndex) + e.getMessage());
-                }
-            });
+        try (ExecutorService executorService = Executors.newFixedThreadPool(threadCount)) {
+            for (int threadIdx = 0; threadIdx < threadCount; threadIdx++) {
+                int connIdx = threadIdx;
+                executorService.execute(() -> {
+                    try {
+                        URI.create("http://localhost:8080/app/info").toURL().openConnection().getInputStream();
+                        LOGGER.info("connection #{} completed", connIdx);
+                    } catch (IOException e) {
+                        LOGGER.error("connection #{} failed, cause=\"{}\"", connIdx, e.getMessage());
+                    }
+                });
+            }
+            executorService.shutdown();
         }
-        executorService.shutdown();
     }
 }
