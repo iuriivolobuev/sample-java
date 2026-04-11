@@ -140,10 +140,10 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.13.0</version>
           <configuration>
-            <release>21</release>
+            <release>25</release>
             <encoding>UTF-8</encoding>
             <compilerArgs>
-              <arg>-parameters</arg>
+              <arg>-parameters</arg><!--allows not to specify explicitly path variable name in @PathVariable-->
             </compilerArgs>
           </configuration>
         </plugin>
