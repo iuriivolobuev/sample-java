@@ -11,8 +11,37 @@
       <param-value>classpath:/web-context.xml</param-value>
     </init-param>
   </servlet>
+  <servlet>
+    <servlet-name>sample</servlet-name>
+    <servlet-class>sample.war.controller.SampleServlet</servlet-class>
+  </servlet>
+  <filter>
+    <filter-name>sampleFilterA</filter-name>
+    <filter-class>sample.war.controller.SampleFilterA</filter-class>
+  </filter>
+  <filter>
+    <filter-name>sampleFilterB</filter-name>
+    <filter-class>sample.war.controller.SampleFilterB</filter-class>
+  </filter>
+
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>sample</servlet-name>
+    <url-pattern>/sample</url-pattern>
+  </servlet-mapping>
+  <filter-mapping>
+    <filter-name>sampleFilterA</filter-name>
+    <servlet-name>sample</servlet-name>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>sampleFilterB</filter-name>
+    <servlet-name>sample</servlet-name>
+  </filter-mapping>
+  
+  <listener>
+    <listener-class>sample.war.controller.SampleServletContextListener</listener-class>
+  </listener>
 </web-app>
